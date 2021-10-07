@@ -90,7 +90,7 @@ def repeatOrStop(): #Asks if the user is done or want to order again
 
 
 #The user starts here
-print("Welkom bij Papi Gelato je mag alle smaken kiezen zolang het maar vanille ijs is(En nu ook meer!).")
+print("Welkom bij Papi Gelato!.")
 time.sleep(2)
 
 howManyBalls()

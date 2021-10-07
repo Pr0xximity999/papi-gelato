@@ -1,6 +1,4 @@
 import time
-from typing import Counter
-succeed = False
 iceCreamQuan = 0
 alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 
@@ -23,9 +21,9 @@ def howManyBalls(): #The part where it asks how manny balls of icecream you want
 
     #If the user enters a different number
     elif iceCreamQuan >= 1 and iceCreamQuan <= 3:
-        coneOrCup(iceCreamQuan)
+        chooseFlavour(iceCreamQuan)
     elif iceCreamQuan > 3 and iceCreamQuan < 8:
-        print(f"Dan krijgt u van mij een bakje met {iceCreamQuan} bolletjes"); repeatOrStop()
+        print(f"Dan krijgt u van mij een bakje met {iceCreamQuan} bolletjes");time.sleep(1); chooseFlavour(iceCreamQuan)
     elif iceCreamQuan >= 8 : 
         print("Sorry, maar zuk grote bakken hebben we niet"); howManyBalls()
 
@@ -33,6 +31,32 @@ def howManyBalls(): #The part where it asks how manny balls of icecream you want
     else:
         print("Sorry, dat snap ik niet..."); howManyBalls()
 
+def chooseFlavour(iceCreamQuan):
+    for i in range(iceCreamQuan):
+        def ask(i): #Made this just so you dont have to repeat the entire number of balls again if you mess one up
+            print(f"Welke smaak wilt u voor bolletje {i + 1}?")
+            time.sleep(0.5)
+            print("A) Aardbei")
+            time.sleep(0.5)
+            print("C) Chocolade")
+            time.sleep(0.5)
+            print("M) Munt")
+            time.sleep(0.5)
+            print("V) Vanille")
+            flavour = input(">>")
+
+            if flavour.lower() != "a" and flavour.lower() != "c" and flavour != "m" and flavour != "v":
+                print("Dat snap ik niet...") 
+                time.sleep(0.5)
+                print("Kies alstublieft A, C, M of V")
+                ask(i)
+        ask(i)
+
+    if iceCreamQuan >= 1 and iceCreamQuan <= 3:
+        coneOrCup(iceCreamQuan)
+    elif iceCreamQuan > 3 and iceCreamQuan < 8:
+        print(f"Hier is uw bakje met {iceCreamQuan} bolletjes")
+        repeatOrStop()
 
 
 def coneOrCup(iceCreamQuan): #Asks if the user wants a cone or cup
@@ -65,7 +89,8 @@ def repeatOrStop(): #Asks if the user is done or want to order again
     else: print("Dat snap ik niet..."); time.sleep(1); print("Kies alstublieft Y of N"); repeatORder
 
 
-print("Welkom bij Papi Gelato je mag alle smaken kiezen zolang het maar vanille ijs is.")
+#The user starts here
+print("Welkom bij Papi Gelato je mag alle smaken kiezen zolang het maar vanille ijs is(En nu ook meer!).")
 time.sleep(2)
 
 howManyBalls()

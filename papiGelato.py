@@ -3,14 +3,19 @@ totalIceCreamQuan = 0.0
 iceCreamQuan = 0
 cupQuan = 0
 coneQuan = 0
+i = 1
 toppingCost = 0.0
 toppingQuan = 0
 chosenContainer = ""
 flavour = ""
 customerType = ""
 litersIceCream = 0
+totalLiterQuan = 0
 iceType = ""
-alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z', '']
+
+def sorryMessage():
+    print("Sorry dat is geen optie die we aanbieden...")
 
 def whatKindOfCustomer(): #Asks what kind of customer the user is
     global customerType
@@ -46,15 +51,18 @@ def howMuchIceCream(): #Handles the ice cream quantity, but depending on the cus
         chooseFlavour()
     elif iceCreamQuan > 3 and iceCreamQuan < 8:
         print(f"Dan krijgt u van mij een bakje met {iceCreamQuan} bolletjes");time.sleep(1); chooseFlavour()
-    elif iceCreamQuan >= 8 : 
+    elif iceCreamQuan > 8 :
         print("Sorry, maar zulke grote bakken hebben we niet"); howMuchIceCream()
 
     #If the user enters anything else
     else:
-        print("Sorry, dat snap ik niet..."); howMuchIceCream()
+        sorryMessage(); howMuchIceCream()
 
 def chooseFlavour(): #The user chooses their flavor here
     global i
+    i = 1
+    global totalLiterQuan
+    totalLiterQuan = 0
     global iceType
     global flavour
     global iceCreamQuan
@@ -68,34 +76,35 @@ def chooseFlavour(): #The user chooses their flavor here
     time.sleep(0.1)
     print("C) Chocolade")
     time.sleep(0.1)
-    print("M) Munt")
-    time.sleep(0.1)
     print("V) Vanille")
-    def ask(i):
+
+    def ask():
+        global i
         global flavour
         global iceCreamQuan
-        print(f"Welke smaak wilt u voor {iceType} nummero {i + 1}?")
+        print(f"Welke smaak wilt u voor {iceType} nummero {i}?")
         flavour = input(">>")
 
         #If the user doenst choose one, repeat in the same iteration
-        if flavour.lower() != "a" and flavour.lower() != "c" and flavour != "m" and flavour != "v":
-            print("Dat snap ik niet...") 
+        if flavour.lower() != "a" and flavour.lower() != "c" and flavour != "v":
+            sorryMessage()
             time.sleep(0.5)
-            print("Kies alstublieft A, C, M of V")
-            ask(i)
-
+            print("Kies alstublieft A, C, of V")
+            ask()
         elif customerType == "zakelijk":
-
-            def howManyLitersOfThisFlavour():                
+            while True: 
+                global totalLiterQuan           
                 literQuan = str(input("Hoeveel liter wilt u met deze smaak?"))
-                if chechIfWholeNum(literQuan, iceType) == False: howManyLitersOfThisFlavour()
+                if chechIfWholeNum(literQuan, iceType) == False: continue
                 literQuan = int(literQuan)
-                if literQuan > iceCreamQuan: print("Dat is meer ijs dan dat u heeft besteld."); howManyLitersOfThisFlavour()
-                else: return literQuan
+                totalLiterQuan += literQuan
+                if totalLiterQuan > iceCreamQuan: print("Dat is meer ijs dan dat u heeft besteld.");totalLiterQuan -= literQuan; continue
+                else: i += literQuan -1
+                if i < iceCreamQuan: i += 1; ask()
+                else: break      
+        if i < iceCreamQuan: i += 1; ask()
 
-            i += howManyLitersOfThisFlavour()
-        if i < iceCreamQuan: ask(i + 1)
-    ask(0)
+    ask()
         
 
     #Chooses whether to send the user right to the checkout or let them choose their container based on the quantity of balls
@@ -134,7 +143,7 @@ def coneOrCup(): #Asks if the user wants a cone or cup
         print(f"Hier is uw {chosenContainer} met {iceCreamQuan} bolletjes")
         chooseTopping()
     else: 
-        print("Dat snap ik niet...")
+        sorryMessage()
         time.sleep(0.5)
         print("Kies alstublieft A of B")
         coneOrCup()
@@ -172,12 +181,12 @@ def repeatOrStop(): #Asks if the user is done or want to order again
 
     time.sleep(0.5)
     print()
-    repeatOrder = input("Wilt u nogmeer bestellen? Y/N >>")
+    repeatOrder = input("Wilt u nog meer bestellen? Y/N >>")
     if repeatOrder.lower() == "y": totalIceCreamQuan += iceCreamQuan; howMuchIceCream()
 
     elif repeatOrder.lower() == "n":totalIceCreamQuan += iceCreamQuan; checkout() 
 
-    else: print("Dat snap ik niet..."); time.sleep(1); print("Kies alstublieft Y of N"); repeatOrStop()
+    else: sorryMessage(); time.sleep(1); print("Kies alstublieft Y of N"); repeatOrStop()
 
 def checkout(): #The user gets their receipt here
     global totalIceCreamQuan
@@ -194,7 +203,7 @@ def checkout(): #The user gets their receipt here
     print()
     print("---------['Papi Gelato']---------")
     if customerType == "particulier":
-        print(f"Bolletjes     {totalIceCreamQuan} x €1.10  = €{totalIceCreamQuan * 1.10}")
+        print(f"Bolletjes     {totalIceCreamQuan} x €0.95  = €{totalIceCreamQuan * 0.95}")
         if coneQuan > 0:
             print(f"Hoorntje      {coneQuan} x €1.25    = €{float(coneQuan * 1.25)}")
         if cupQuan > 0:
@@ -208,7 +217,7 @@ def checkout(): #The user gets their receipt here
         print(f"Liter          {iceCreamQuan} x €9.80   = €{iceCreamQuan * 9.80}")
         print("                         --------- +")
         print(f"Totaal                   = {float(iceCreamQuan * 9.80)}")
-        print(f"BTW(9%)                  = {float((iceCreamQuan * 9.80) * 0.09)}")
+        print(f"BTW(6%)                  = {float((iceCreamQuan * 9.80) * 0.06)}")
     print("Bedankt en tot ziens!")
     input()
     exit()
